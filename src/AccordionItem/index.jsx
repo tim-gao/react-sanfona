@@ -126,7 +126,7 @@ export default class AccordionItem extends Component {
   }
 
   render() {
-    const title = typeof this.props.title !== 'object' ? `${this.props.title.toLowerCase().replace(/\s/g, '-')}-${this.props.index}` : this.props.index;
+    const title = typeof this.props.title !== 'object' ? `${this.props.title.toLowerCase().replace(/\s/g, '-')}-${this.props.index}` : this.props.index.toString();
     return (
       <div {...this.getProps()} ref="item" onKeyDown={this.handleKeyDown.bind(this)}>
         <AccordionItemTitle

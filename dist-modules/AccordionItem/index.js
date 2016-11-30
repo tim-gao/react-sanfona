@@ -183,7 +183,7 @@ var AccordionItem = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var title = _typeof(this.props.title) !== 'object' ? this.props.title.toLowerCase().replace(/\s/g, '-') + '-' + this.props.index : this.props.index;
+      var title = _typeof(this.props.title) !== 'object' ? this.props.title.toLowerCase().replace(/\s/g, '-') + '-' + this.props.index : this.props.index.toString();
       return _react2.default.createElement(
         'div',
         _extends({}, this.getProps(), { ref: 'item', onKeyDown: this.handleKeyDown.bind(this) }),
