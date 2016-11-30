@@ -20,10 +20,6 @@ var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _uuid = require('uuid');
-
-var _uuid2 = _interopRequireDefault(_uuid);
-
 var _AccordionItemBody = require('../AccordionItemBody');
 
 var _AccordionItemBody2 = _interopRequireDefault(_AccordionItemBody);
@@ -59,97 +55,81 @@ var AccordionItem = function (_Component) {
   }
 
   _createClass(AccordionItem, [{
-    key: 'componentWillMount',
-    value: function componentWillMount() {
-      this.uuid = _uuid2.default.v4();
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.setMaxHeight();
     }
   }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate(prevProps) {
-      if (prevProps.expanded !== this.props.expanded) {
-        if (this.props.expanded) {
-          this.maybeExpand();
+      var _props = this.props;
+      var expanded = _props.expanded;
+      var disabled = _props.disabled;
+      var children = _props.children;
+
+
+      if (prevProps.expanded !== expanded) {
+        if (disabled) return;
+
+        if (expanded) {
+          this.handleExpand();
         } else {
           this.handleCollapse();
         }
+      } else if (prevProps.children !== children) {
+        this.setMaxHeight();
       }
-    }
-  }, {
-    key: 'startTransition',
-    value: function startTransition() {
-      this.setState({
-        maxHeight: this.maxHeight,
-        overflow: 'hidden'
-      });
-      clearTimeout(this.timeout);
-    }
-  }, {
-    key: 'maybeExpand',
-    value: function maybeExpand() {
-      var disabled = this.props.disabled;
-
-
-      if (disabled) {
-        return;
-      }
-
-      var bodyNode = _reactDom2.default.findDOMNode(this.refs.body);
-      var images = bodyNode.querySelectorAll('img');
-
-      if (images.length > 0) {
-        this.preloadImages(bodyNode, images);
-        return;
-      }
-
-      this.handleExpand();
     }
   }, {
     key: 'handleExpand',
     value: function handleExpand() {
-      var _this2 = this;
+      var _props2 = this.props;
+      var onExpand = _props2.onExpand;
+      var slug = _props2.slug;
 
-      var onExpand = this.props.onExpand;
 
+      this.setMaxHeight();
 
-      this.startTransition();
-      this.timeout = setTimeout(function () {
-        _this2.setState({
-          maxHeight: 'none',
-          overflow: 'visible'
-        });
-
-        if (onExpand) {
-          onExpand();
-        }
-      }, this.state.duration);
+      if (onExpand) {
+        slug ? onExpand(slug) : onExpand();
+      }
     }
   }, {
     key: 'handleCollapse',
     value: function handleCollapse() {
-      var _this3 = this;
+      var _props3 = this.props;
+      var onClose = _props3.onClose;
+      var slug = _props3.slug;
 
-      var onClose = this.props.onClose;
 
+      this.setMaxHeight();
 
-      this.startTransition();
-      this.timeout = setTimeout(function () {
-        _this3.setState({
-          maxHeight: 0,
-          overflow: 'hidden'
-        });
-
-        if (onClose) {
-          onClose();
-        }
-      }, 0);
+      if (onClose) {
+        slug ? onClose(slug) : onClose();
+      }
     }
   }, {
-    key: 'preloadImages',
+    key: 'setMaxHeight',
+    value: function setMaxHeight() {
+      var bodyNode = _reactDom2.default.findDOMNode(this.refs.body);
+      var images = bodyNode.querySelectorAll('img');
 
+      if (images.length > 0) {
+        return this.preloadImages(bodyNode, images);
+      }
+
+      this.setState({
+        maxHeight: this.props.expanded ? bodyNode.scrollHeight + 'px' : 0,
+        overflow: 'hidden'
+      });
+    }
 
     // Wait for images to load before calculating maxHeight
+
+  }, {
+    key: 'preloadImages',
     value: function preloadImages(node) {
-      var _this4 = this;
+      var _this2 = this;
 
       var images = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
@@ -158,7 +138,10 @@ var AccordionItem = function (_Component) {
         imagesLoaded++;
 
         if (imagesLoaded === images.length) {
-          _this4.handleExpand();
+          _this2.setState({
+            maxHeight: _this2.props.expanded ? node.scrollHeight + 'px' : 0,
+            overflow: 'hidden'
+          });
         }
       };
 
@@ -206,7 +189,7 @@ var AccordionItem = function (_Component) {
           title: this.props.title,
           onClick: this.props.disabled ? null : this.props.onClick,
           titleColor: this.props.titleColor,
-          uuid: this.uuid }),
+          uuid: this.props.title.toLowerCase().replace(/\s/g, '-') + '-' + this.props.index }),
         _react2.default.createElement(
           _AccordionItemBody2.default,
           {
@@ -215,16 +198,10 @@ var AccordionItem = function (_Component) {
             className: this.props.bodyClassName,
             overflow: this.state.overflow,
             ref: 'body',
-            uuid: this.uuid },
+            uuid: this.props.title.toLowerCase().replace(/\s/g, '-') + '-' + this.props.index },
           this.props.children
         )
       );
-    }
-  }, {
-    key: 'maxHeight',
-    get: function get() {
-      var body = _reactDom2.default.findDOMNode(this.refs.body);
-      return body.scrollHeight + 'px';
     }
   }]);
 
