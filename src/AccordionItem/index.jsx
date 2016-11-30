@@ -126,6 +126,7 @@ export default class AccordionItem extends Component {
   }
 
   render() {
+    const title = typeof this.props.title !== 'object' ? `${this.props.title.toLowerCase().replace(/\s/g, '-')}-${this.props.index}` : this.props.index;
     return (
       <div {...this.getProps()} ref="item" onKeyDown={this.handleKeyDown.bind(this)}>
         <AccordionItemTitle
@@ -133,14 +134,14 @@ export default class AccordionItem extends Component {
           title={this.props.title}
           onClick={this.props.disabled ? null : this.props.onClick}
           titleColor= {this.props.titleColor}
-          uuid={`${this.props.title.toLowerCase().replace(/\s/g, '-')}-${this.props.index}`} />
+          uuid={title} />
         <AccordionItemBody
           maxHeight={this.state.maxHeight}
           duration={this.state.duration}
           className={this.props.bodyClassName}
           overflow={this.state.overflow}
           ref="body"
-          uuid={`${this.props.title.toLowerCase().replace(/\s/g, '-')}-${this.props.index}`}>
+          uuid={title}>
           {this.props.children}
         </AccordionItemBody>
       </div>

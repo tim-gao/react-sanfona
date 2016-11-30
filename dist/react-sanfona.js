@@ -206,7 +206,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          key: key,
 	          onClick: _this2.handleClick.bind(_this2, key),
 	          onKeyDown: _this2.handleClick.bind(_this2, key),
-	          ref: 'item-' + key
+	          ref: 'item-' + key,
+	          index: index
 	        });
 	      });
 	    }
@@ -319,6 +320,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -495,6 +498,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var title = _typeof(this.props.title) !== 'object' ? this.props.title.toLowerCase().replace(/\s/g, '-') + '-' + this.props.index : this.props.index;
 	      return _react2.default.createElement(
 	        'div',
 	        _extends({}, this.getProps(), { ref: 'item', onKeyDown: this.handleKeyDown.bind(this) }),
@@ -503,7 +507,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          title: this.props.title,
 	          onClick: this.props.disabled ? null : this.props.onClick,
 	          titleColor: this.props.titleColor,
-	          uuid: this.props.title.toLowerCase().replace(/\s/g, '-') + '-' + this.props.index }),
+	          uuid: title }),
 	        _react2.default.createElement(
 	          _AccordionItemBody2.default,
 	          {
@@ -512,7 +516,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            className: this.props.bodyClassName,
 	            overflow: this.state.overflow,
 	            ref: 'body',
-	            uuid: this.props.title.toLowerCase().replace(/\s/g, '-') + '-' + this.props.index },
+	            uuid: title },
 	          this.props.children
 	        )
 	      );

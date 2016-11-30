@@ -116,7 +116,8 @@ var Accordion = function (_Component) {
           key: key,
           onClick: _this2.handleClick.bind(_this2, key),
           onKeyDown: _this2.handleClick.bind(_this2, key),
-          ref: 'item-' + key
+          ref: 'item-' + key,
+          index: index
         });
       });
     }
