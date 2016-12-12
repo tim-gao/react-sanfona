@@ -3,6 +3,7 @@
 import className from 'classnames';
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
+import uuid from 'uuid';
 
 import AccordionItemBody from '../AccordionItemBody';
 import AccordionItemTitle from '../AccordionItemTitle';
@@ -16,6 +17,10 @@ export default class AccordionItem extends Component {
       overflow: props.expanded ? 'visible' : 'hidden',
       duration: 300
     };
+  }
+
+  componentWillMount() {
+    this.uuid = uuid.v4();
   }
 
   componentDidMount() {
@@ -126,7 +131,6 @@ export default class AccordionItem extends Component {
   }
 
   render() {
-    const title = typeof this.props.title !== 'object' ? `${this.props.title.toLowerCase().replace(/\s/g, '-')}-${this.props.index}` : this.props.index.toString();
     return (
       <div {...this.getProps()} ref="item" onKeyDown={this.handleKeyDown.bind(this)}>
         <AccordionItemTitle
@@ -134,14 +138,14 @@ export default class AccordionItem extends Component {
           title={this.props.title}
           onClick={this.props.disabled ? null : this.props.onClick}
           titleColor= {this.props.titleColor}
-          uuid={title} />
+          uuid={this.uuid} />
         <AccordionItemBody
           maxHeight={this.state.maxHeight}
           duration={this.state.duration}
           className={this.props.bodyClassName}
           overflow={this.state.overflow}
           ref="body"
-          uuid={title}>
+          uuid={this.uuid}>
           {this.props.children}
         </AccordionItemBody>
       </div>
